@@ -18,6 +18,8 @@ package org.achartengine;
 import org.achartengine.chart.AbstractChart;
 import org.achartengine.chart.RoundChart;
 import org.achartengine.chart.XYChart;
+
+import org.achartengine.chartdemo.demo.R;
 import org.achartengine.model.Point;
 import org.achartengine.model.SeriesSelection;
 import org.achartengine.renderer.DefaultRenderer;
@@ -97,12 +99,12 @@ public class GraphicalView extends View {
       mRenderer = ((RoundChart) mChart).getRenderer();
     }
     if (mRenderer.isZoomButtonsVisible()) {
-      zoomInImage = BitmapFactory.decodeStream(GraphicalView.class
-          .getResourceAsStream("image/zoom_in.png"));
-      zoomOutImage = BitmapFactory.decodeStream(GraphicalView.class
-          .getResourceAsStream("image/zoom_out.png"));
-      fitZoomImage = BitmapFactory.decodeStream(GraphicalView.class
-          .getResourceAsStream("image/zoom-1.png"));
+
+     final BitmapFactory.Options options = new BitmapFactory.Options();
+
+      zoomInImage = BitmapFactory.decodeResource(getResources(), R.raw.zoom_in,options);
+      zoomOutImage = BitmapFactory.decodeResource(getResources(),R.raw.zoom_out,options);
+      fitZoomImage = BitmapFactory.decodeResource(getResources(),R.raw.zoom1,options);
     }
 
     if (mRenderer instanceof XYMultipleSeriesRenderer
@@ -139,7 +141,7 @@ public class GraphicalView extends View {
 
   /**
    * Returns the drawn state of the chart.
-   * 
+   *
    * @return the drawn state of the chart
    */
   public boolean isChartDrawn() {
@@ -224,7 +226,7 @@ public class GraphicalView extends View {
       repaint();
     }
   }
-
+  
   /**
    * Do a chart zoom reset / fit zoom.
    */
@@ -247,9 +249,9 @@ public class GraphicalView extends View {
         mZoomIn.addZoomListener(listener);
         mZoomOut.addZoomListener(listener);
       }
-    }
-    if (onPinch) {
-      mTouchHandler.addZoomListener(listener);
+      if (onPinch) {
+        mTouchHandler.addZoomListener(listener);
+      }
     }
   }
 
@@ -296,7 +298,7 @@ public class GraphicalView extends View {
       oldX = event.getX();
       oldY = event.getY();
     }
-    if (mRenderer != null && mDrawn && (mRenderer.isPanEnabled() || mRenderer.isZoomEnabled())) {
+    if (mRenderer != null && (mRenderer.isPanEnabled() || mRenderer.isZoomEnabled())) {
       if (mTouchHandler.handleTouch(event)) {
         return true;
       }
