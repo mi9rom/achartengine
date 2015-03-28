@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2009 - 2013 SC 4ViewSoft SRL
- *  
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *  
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,7 +37,8 @@ public class TimeChart extends LineChart {
   /** The number of milliseconds in a day. */
   public static final long DAY = 24 * 60 * 60 * 1000;
   /** The date format pattern to be used in formatting the X axis labels. */
-  private String mDateFormat;
+  private String [] mDateFormat = null;
+  private double mXWidth [] = {0};
   /** The starting point for labels. */
   private Double mStartPoint;
 
@@ -46,7 +47,7 @@ public class TimeChart extends LineChart {
 
   /**
    * Builds a new time chart instance.
-   * 
+   *
    * @param dataset the multiple series dataset
    * @param renderer the multiple series renderer
    */
@@ -54,29 +55,60 @@ public class TimeChart extends LineChart {
     super(dataset, renderer);
   }
 
-  /**
-   * Returns the date format pattern to be used for formatting the X axis
-   * labels.
-   * 
-   * @return the date format pattern for the X axis labels
-   */
-  public String getDateFormat() {
+    /**
+     * Returns first date format pattern to be used for formatting the X axis
+     * labels.
+     *
+     * @return  first date format pattern for the X axis labels
+     */
+    public String getDateFormat() {
+        return mDateFormat[0];
+    }
+
+    /**
+     *
+     * @return
+     */
+
+   /**
+    * Returns date format pattern to be used for formatting the X axis
+    * labels.
+    *
+    * @return  date format pattern for the X axis labels
+    */
+
+    public String [] getDateFormatM() {
+
     return mDateFormat;
   }
 
-  /**
+    /**
    * Sets the date format pattern to be used for formatting the X axis labels.
-   * 
+   *
    * @param format the date format pattern for the X axis labels. If null, an
    *          appropriate default format will be used.
    */
   public void setDateFormat(String format) {
+    mDateFormat[0] = format;
+  }
+
+    /**
+     * Sets  date format patterns to be used for formatting the X axis labels.
+     *
+     *
+     * @param format table of date format patterns for  X axis labels corresponding to maximum widths. If null, an
+     *          appropriate default format will be used.
+     * @param xWidth table of maximum widths (milliseconds), values have to be sorted ascending
+     *
+     */
+  public void setDateFormat(String [] format , double xWidth[]) {
     mDateFormat = format;
+    mXWidth =xWidth;
   }
 
   /**
    * The graphical representation of the labels on the X axis.
-   * 
+   *
    * @param xLabels the X labels values
    * @param xTextLabelLocations the X text label locations
    * @param canvas the canvas to paint to
@@ -96,7 +128,7 @@ public class TimeChart extends LineChart {
       boolean showLabels = mRenderer.isShowLabels();
       boolean showGridY = mRenderer.isShowGridY();
       boolean showTickMarks = mRenderer.isShowTickMarks();
-      DateFormat format = getDateFormat(xLabels.get(0), xLabels.get(length - 1));
+      DateFormat format = getDateFormat(minX, maxX);
       for (int i = 0; i < length; i++) {
         long label = Math.round(xLabels.get(i));
         float xLabel = (float) (left + xPixelsPerUnit * (label - minX));
@@ -122,7 +154,8 @@ public class TimeChart extends LineChart {
 
   /**
    * Returns the date format pattern to be used, based on the date range.
-   * 
+   * Date format choose algorithm :   format[i] where i is the highest i where xWidth[i] <=  current chart window width ( in milliseconds) = start - end
+   *
    * @param start the start date in milliseconds
    * @param end the end date in milliseconds
    * @return the date format
@@ -131,7 +164,14 @@ public class TimeChart extends LineChart {
     if (mDateFormat != null) {
       SimpleDateFormat format = null;
       try {
-        format = new SimpleDateFormat(mDateFormat);
+        String mForm = null;
+        double dlt = end - start;
+        for (int i = 0; i < mXWidth.length ; i ++)
+          if ( dlt <= mXWidth[i]) mForm = mDateFormat[i];
+        if (mForm == null)
+          mForm = mDateFormat[mDateFormat.length-1];
+
+        format = new SimpleDateFormat(mForm);
         return format;
       } catch (Exception e) {
         // do nothing here
@@ -149,7 +189,7 @@ public class TimeChart extends LineChart {
 
   /**
    * Returns the chart type identifier.
-   * 
+   *
    * @return the chart type
    */
   public String getChartType() {

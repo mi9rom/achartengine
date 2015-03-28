@@ -44,7 +44,9 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
   /** The end value in the Y axis range. */
   private double[] mMaxY;
   /** The approximative number of labels on the x axis. */
-  private int mXLabels = 5;
+  private int mXLabels[] = {5};
+  private double[] mXWidth = {0};
+
   /** The approximative number of labels on the y axis. */
   private int mYLabels = 5;
   /** The current orientation of the chart. */
@@ -510,12 +512,13 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the approximate number of labels for the X axis.
-   * 
+   *
    * @return the approximate number of labels for the X axis
    */
   public int getXLabels() {
-    return mXLabels;
-  }
+        return mXLabels[0];
+    }
+
 
   /**
    * Sets the approximate number of labels for the X axis.
@@ -523,7 +526,18 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
    * @param xLabels the approximate number of labels for the X axis
    */
   public void setXLabels(int xLabels) {
+    mXLabels[0] = xLabels;
+  }
+
+    /**
+     * Sets the approximate number of labels dependantof width array for the X axis
+     *
+     * @param xLabels the approximate number of labels for the X axis
+     * @param width the array of ranges
+     */
+  public void setXLabels(int [] xLabels , double width [] ) {
     mXLabels = xLabels;
+    mXWidth = width;
   }
 
   /**
@@ -549,7 +563,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Removes text label for the specified X axis value.
-   * 
+   *
    * @param x the X axis value
    */
   public synchronized void removeXTextLabel(double x) {
@@ -621,7 +635,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Removes text label for the specified Y axis value.
-   * 
+   *
    * @param y the Y axis value
    */
   public void removeYTextLabel(double y) {
@@ -641,7 +655,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Removes text label for the specified Y axis value.
-   * 
+   *
    * @param y the Y axis value
    * @param scale the renderer scale
    */
@@ -725,7 +739,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the constant bar chart item width in pixels.
-   * 
+   *
    * @return the bar width
    */
   public float getBarWidth() {
@@ -734,7 +748,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the bar chart item constant width in pixels.
-   * 
+   *
    * @param width width in pixels
    */
   public void setBarWidth(float width) {
@@ -877,7 +891,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
   /**
    * Returns the grid color.
    * @param scale the renderer index
-   * 
+   *
    * @return the grid color
    */
   public int getGridColor(int scale) {
@@ -895,7 +909,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the color of the grid.
-   * 
+   *
    * @param color the grid color
    * @param scale the renderer scale
    */
@@ -1157,7 +1171,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the X labels padding.
-   * 
+   *
    * @return X labels padding
    */
   public float getXLabelsPadding() {
@@ -1166,7 +1180,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the X labels padding
-   * 
+   *
    * @param padding the amount of padding between the axis and the label
    */
   public void setXLabelsPadding(float padding) {
@@ -1175,7 +1189,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the Y labels padding.
-   * 
+   *
    * @return Y labels padding
    */
   public float getYLabelsPadding() {
@@ -1184,7 +1198,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the Y labels vertical padding
-   * 
+   *
    * @param padding the amount of vertical padding
    */
   public void setYLabelsVerticalPadding(float padding) {
@@ -1193,7 +1207,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the Y labels vertical padding.
-   * 
+   *
    * @return Y labels vertical padding
    */
   public float getYLabelsVerticalPadding() {
@@ -1202,7 +1216,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the Y labels padding
-   * 
+   *
    * @param padding the amount of padding between the axis and the label
    */
   public void setYLabelsPadding(float padding) {
@@ -1211,7 +1225,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the number format for displaying labels.
-   * 
+   *
    * @return the number format for labels
    * @deprecated use getXLabelFormat and getYLabelFormat instead
    */
@@ -1221,7 +1235,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the number format for displaying labels.
-   * 
+   *
    * @param format the number format for labels
    * @deprecated use setXLabelFormat and setYLabelFormat instead
    */
@@ -1231,7 +1245,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the number format for displaying X axis labels.
-   * 
+   *
    * @return the number format for X axis labels
    */
   public NumberFormat getXLabelFormat() {
@@ -1240,7 +1254,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the number format for X axis displaying labels.
-   * 
+   *
    * @param format the number format for X axis labels
    */
   public void setXLabelFormat(NumberFormat format) {
@@ -1249,8 +1263,8 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the number format for Y axis displaying labels.
-   * 
-   * @param scale the renderer scale 
+   *
+   * @param scale the renderer scale
    * @return the number format for Y axis labels
    */
   public NumberFormat getYLabelFormat(int scale) {
@@ -1259,7 +1273,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the number format for Y axis displaying labels.
-   * 
+   *
    * @param format the number format for labels
    * @param scale the renderer scale
    */

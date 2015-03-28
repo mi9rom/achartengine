@@ -349,6 +349,8 @@ public class ChartFactory {
     return getTimeChartIntent(context, dataset, renderer, format, "");
   }
 
+
+
   /**
    * Creates a bar chart intent that can be used to start the graphical view
    * activity.
@@ -491,6 +493,60 @@ public class ChartFactory {
     intent.putExtra(TITLE, activityTitle);
     return intent;
   }
+
+    /**
+     * Creates a time chart intent with flexible date format  that can be used to start the graphical view
+     * activity.
+     * <br>
+     *  Date format choose algorithm :   format[i] where i is the highest i where xWidth[i] <=  current chart window width ( in milliseconds)
+     *
+     * @param context  context
+     * @param dataset  multiple series dataset (cannot be null)
+     * @param renderer  multiple series renderer (cannot be null)
+     *          appropriate default format will be used.
+     * @param xWidth table of maximum widths (milliseconds), values have to be sorted ascending
+     * @param activityTitle  graphical chart activity title
+     * @return Return a new  time chart intent
+     * @throws IllegalArgumentException if a dataset is null or a renderer is null or
+     *           if the dataset and the renderer don't include the same number of
+     *           series
+     */
+
+    public static final Intent getTimeChartIntent(Context context, XYMultipleSeriesDataset dataset,
+                                                  XYMultipleSeriesRenderer renderer, String [] format,double [] xWidth,  String activityTitle) {
+        checkParameters(dataset, renderer);
+        Intent intent = new Intent(context, GraphicalActivity.class);
+        TimeChart chart = new TimeChart(dataset, renderer);
+        chart.setDateFormat(format,xWidth);
+
+        intent.putExtra(CHART, chart);
+        intent.putExtra(TITLE, activityTitle);
+        return intent;
+    }
+
+    /**
+     * Creates a time chart intent with flexible date format  that can be used to start the graphical view
+     * activity.
+     * <br>
+     *  Date format choose algorithm :   format[i] where i is the highest i where xWidth[i] <=  current chart window width ( in milliseconds)
+     *
+     * @param context  context
+     * @param dataset  multiple series dataset (cannot be null)
+     * @param renderer  multiple series renderer (cannot be null)
+     * @param format table of date format patterns for the X axis labels corresponding to maximum widths. If null, an
+     *          appropriate default format will be used.
+     * @param xWidth table of maximum widths (milliseconds), values have to be sorted ascending
+     * @return Return a new  time chart intent
+     * @throws IllegalArgumentException if a dataset is null or a renderer is null or
+     *           if the dataset and the renderer don't include the same number of
+     *           series
+     */
+
+    public static final Intent getTimeChartIntent(Context context, XYMultipleSeriesDataset dataset,
+                                                  XYMultipleSeriesRenderer renderer, String format[], double xWidth[]) {
+        return getTimeChartIntent(context, dataset, renderer, format,xWidth, "");
+    }
+
 
   /**
    * Creates a bar chart intent that can be used to start the graphical view
