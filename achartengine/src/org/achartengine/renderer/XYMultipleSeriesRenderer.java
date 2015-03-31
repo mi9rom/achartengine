@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2009 - 2013 SC 4ViewSoft SRL
- *  
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *  
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,6 +15,7 @@
  */
 package org.achartengine.renderer;
 
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -24,6 +25,7 @@ import org.achartengine.util.MathHelper;
 
 import android.graphics.Color;
 import android.graphics.Paint.Align;
+import android.os.Build;
 
 /**
  * Multiple XY series renderer.
@@ -129,7 +131,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
     /**
      * Return the orientation rotate angle.
-     * 
+     *
      * @return the orientaion rotate angle
      */
     public int getAngle() {
@@ -151,7 +153,10 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
     yLabelsAlign = new Align[scales];
     yAxisAlign = new Align[scales];
     mYLabelsColor = new int[scales];
-    mYLabelFormat = new NumberFormat[scales];
+      if (Build.VERSION.SDK_INT > 10) // not complete workaround for the serialization bug in android ver 2.3 ...
+      mYLabelFormat = new NumberFormat[scales];
+    else
+        mYLabelFormat =null;
     mMinX = new double[scales];
     mMaxX = new double[scales];
     mMinY = new double[scales];
@@ -159,7 +164,8 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
     mGridColors = new int[scales];
     for (int i = 0; i < scales; i++) {
       mYLabelsColor[i] = TEXT_COLOR;
-      mYLabelFormat[i] = NumberFormat.getNumberInstance();
+        if (Build.VERSION.SDK_INT > 10) // not complete workaround for the serialization bug in android ver 2.3 ...
+          mYLabelFormat[i] = NumberFormat.getNumberInstance();
       mGridColors[i] = Color.argb(75, 200, 200, 200);
       initAxesRangeForScale(i);
     }
@@ -180,7 +186,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the current orientation of the chart X axis.
-   * 
+   *
    * @return the chart orientation
    */
   public Orientation getOrientation() {
@@ -189,7 +195,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the current orientation of the chart X axis.
-   * 
+   *
    * @param orientation the chart orientation
    */
   public void setOrientation(Orientation orientation) {
@@ -198,7 +204,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the title for the X axis.
-   * 
+   *
    * @return the X axis title
    */
   public String getXTitle() {
@@ -207,7 +213,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the title for the X axis.
-   * 
+   *
    * @param title the X axis title
    */
   public void setXTitle(String title) {
@@ -216,7 +222,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the title for the Y axis.
-   * 
+   *
    * @return the Y axis title
    */
   public String getYTitle() {
@@ -225,7 +231,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the title for the Y axis.
-   * 
+   *
    * @param scale the renderer scale
    * @return the Y axis title
    */
@@ -235,7 +241,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the title for the Y axis.
-   * 
+   *
    * @param title the Y axis title
    */
   public void setYTitle(String title) {
@@ -244,7 +250,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the title for the Y axis.
-   * 
+   *
    * @param title the Y axis title
    * @param scale the renderer scale
    */
@@ -254,7 +260,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the axis title text size.
-   * 
+   *
    * @return the axis title text size
    */
   public float getAxisTitleTextSize() {
@@ -263,7 +269,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the axis title text size.
-   * 
+   *
    * @param textSize the chart axis text size
    */
   public void setAxisTitleTextSize(float textSize) {
@@ -272,7 +278,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the start value of the X axis range.
-   * 
+   *
    * @return the X axis range start value
    */
   public double getXAxisMin() {
@@ -281,7 +287,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the start value of the X axis range.
-   * 
+   *
    * @param min the X axis range start value
    */
   public void setXAxisMin(double min) {
@@ -290,7 +296,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns if the minimum X value was set.
-   * 
+   *
    * @return the minX was set or not
    */
   public boolean isMinXSet() {
@@ -299,7 +305,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the end value of the X axis range.
-   * 
+   *
    * @return the X axis range end value
    */
   public double getXAxisMax() {
@@ -308,7 +314,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the end value of the X axis range.
-   * 
+   *
    * @param max the X axis range end value
    */
   public void setXAxisMax(double max) {
@@ -317,7 +323,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns if the maximum X value was set.
-   * 
+   *
    * @return the maxX was set or not
    */
   public boolean isMaxXSet() {
@@ -326,7 +332,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the start value of the Y axis range.
-   * 
+   *
    * @return the Y axis range end value
    */
   public double getYAxisMin() {
@@ -335,7 +341,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the start value of the Y axis range.
-   * 
+   *
    * @param min the Y axis range start value
    */
   public void setYAxisMin(double min) {
@@ -344,7 +350,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns if the minimum Y value was set.
-   * 
+   *
    * @return the minY was set or not
    */
   public boolean isMinYSet() {
@@ -353,7 +359,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the end value of the Y axis range.
-   * 
+   *
    * @return the Y axis range end value
    */
   public double getYAxisMax() {
@@ -362,7 +368,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the end value of the Y axis range.
-   * 
+   *
    * @param max the Y axis range end value
    */
   public void setYAxisMax(double max) {
@@ -371,7 +377,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns if the maximum Y value was set.
-   * 
+   *
    * @return the maxY was set or not
    */
   public boolean isMaxYSet() {
@@ -380,7 +386,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the start value of the X axis range.
-   * 
+   *
    * @param scale the renderer scale
    * @return the X axis range start value
    */
@@ -390,7 +396,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the start value of the X axis range.
-   * 
+   *
    * @param min the X axis range start value
    * @param scale the renderer scale
    */
@@ -403,7 +409,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns if the minimum X value was set.
-   * 
+   *
    * @param scale the renderer scale
    * @return the minX was set or not
    */
@@ -413,7 +419,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the end value of the X axis range.
-   * 
+   *
    * @param scale the renderer scale
    * @return the X axis range end value
    */
@@ -423,7 +429,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the end value of the X axis range.
-   * 
+   *
    * @param max the X axis range end value
    * @param scale the renderer scale
    */
@@ -436,7 +442,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns if the maximum X value was set.
-   * 
+   *
    * @param scale the renderer scale
    * @return the maxX was set or not
    */
@@ -446,7 +452,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the start value of the Y axis range.
-   * 
+   *
    * @param scale the renderer scale
    * @return the Y axis range end value
    */
@@ -456,7 +462,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the start value of the Y axis range.
-   * 
+   *
    * @param min the Y axis range start value
    * @param scale the renderer scale
    */
@@ -469,7 +475,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns if the minimum Y value was set.
-   * 
+   *
    * @param scale the renderer scale
    * @return the minY was set or not
    */
@@ -479,7 +485,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the end value of the Y axis range.
-   * 
+   *
    * @param scale the renderer scale
    * @return the Y axis range end value
    */
@@ -489,7 +495,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the end value of the Y axis range.
-   * 
+   *
    * @param max the Y axis range end value
    * @param scale the renderer scale
    */
@@ -502,7 +508,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns if the maximum Y value was set.
-   * 
+   *
    * @param scale the renderer scale
    * @return the maxY was set or not
    */
@@ -522,7 +528,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the approximate number of labels for the X axis.
-   * 
+   *
    * @param xLabels the approximate number of labels for the X axis
    */
   public void setXLabels(int xLabels) {
@@ -542,7 +548,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Adds a new text label for the specified X axis value.
-   * 
+   *
    * @param x the X axis value
    * @param text the text label
    * @deprecated use addXTextLabel instead
@@ -553,7 +559,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Adds a new text label for the specified X axis value.
-   * 
+   *
    * @param x the X axis value
    * @param text the text label
    */
@@ -572,7 +578,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the X axis text label at the specified X axis value.
-   * 
+   *
    * @param x the X axis value
    * @return the X axis text label
    */
@@ -582,7 +588,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the X text label locations.
-   * 
+   *
    * @return the X text label locations
    */
   public synchronized Double[] getXTextLabelLocations() {
@@ -591,7 +597,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Clears the existing text labels.
-   * 
+   *
    * @deprecated use clearXTextLabels instead
    */
   public void clearTextLabels() {
@@ -607,7 +613,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * If X axis labels should be rounded.
-   * 
+   *
    * @return if rounded time values to be used
    */
   public boolean isXRoundedLabels() {
@@ -616,7 +622,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets if X axis rounded time values to be used.
-   * 
+   *
    * @param rounded rounded values to be used
    */
   public void setXRoundedLabels(boolean rounded) {
@@ -625,7 +631,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Adds a new text label for the specified Y axis value.
-   * 
+   *
    * @param y the Y axis value
    * @param text the text label
    */
@@ -644,7 +650,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Adds a new text label for the specified Y axis value.
-   * 
+   *
    * @param y the Y axis value
    * @param text the text label
    * @param scale the renderer scale
@@ -665,7 +671,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the Y axis text label at the specified Y axis value.
-   * 
+   *
    * @param y the Y axis value
    * @return the Y axis text label
    */
@@ -675,7 +681,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the Y axis text label at the specified Y axis value.
-   * 
+   *
    * @param y the Y axis value
    * @param scale the renderer scale
    * @return the Y axis text label
@@ -686,7 +692,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the Y text label locations.
-   * 
+   *
    * @return the Y text label locations
    */
   public Double[] getYTextLabelLocations() {
@@ -695,7 +701,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the Y text label locations.
-   * 
+   *
    * @param scale the renderer scale
    * @return the Y text label locations
    */
@@ -712,7 +718,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Clears the existing text labels on the Y axis.
-   * 
+   *
    * @param scale the renderer scale
    */
   public synchronized void clearYTextLabels(int scale) {
@@ -721,7 +727,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the approximate number of labels for the Y axis.
-   * 
+   *
    * @return the approximate number of labels for the Y axis
    */
   public int getYLabels() {
@@ -730,7 +736,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the approximate number of labels for the Y axis.
-   * 
+   *
    * @param yLabels the approximate number of labels for the Y axis
    */
   public void setYLabels(int yLabels) {
@@ -757,7 +763,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the enabled state of the pan on at least one axis.
-   * 
+   *
    * @return if pan is enabled
    */
   public boolean isPanEnabled() {
@@ -766,7 +772,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the enabled state of the pan on X axis.
-   * 
+   *
    * @return if pan is enabled on X axis
    */
   public boolean isPanXEnabled() {
@@ -775,7 +781,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the enabled state of the pan on Y axis.
-   * 
+   *
    * @return if pan is enabled on Y axis
    */
   public boolean isPanYEnabled() {
@@ -784,7 +790,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the enabled state of the pan.
-   * 
+   *
    * @param enabledX pan enabled on X axis
    * @param enabledY pan enabled on Y axis
    */
@@ -804,7 +810,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the enabled state of the zoom on at least one axis.
-   * 
+   *
    * @return if zoom is enabled
    */
   public boolean isZoomEnabled() {
@@ -813,7 +819,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the enabled state of the zoom on X axis.
-   * 
+   *
    * @return if zoom is enabled on X axis
    */
   public boolean isZoomXEnabled() {
@@ -822,7 +828,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the enabled state of the zoom on Y axis.
-   * 
+   *
    * @return if zoom is enabled on Y axis
    */
   public boolean isZoomYEnabled() {
@@ -831,7 +837,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the enabled state of the zoom.
-   * 
+   *
    * @param enabledX zoom enabled on X axis
    * @param enabledY zoom enabled on Y axis
    */
@@ -842,7 +848,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the spacing between bars, in bar charts.
-   * 
+   *
    * @return the spacing between bars
    * @deprecated use getBarSpacing instead
    */
@@ -852,7 +858,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the spacing between bars, in bar charts.
-   * 
+   *
    * @return the spacing between bars
    */
   public double getBarSpacing() {
@@ -863,7 +869,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
    * Sets the spacing between bars, in bar charts. Only available for bar
    * charts. This is a coefficient of the bar width. For instance, if you want
    * the spacing to be a half of the bar width, set this value to 0.5.
-   * 
+   *
    * @param spacing the spacing between bars coefficient
    */
   public void setBarSpacing(double spacing) {
@@ -872,7 +878,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the margins color.
-   * 
+   *
    * @return the margins color
    */
   public int getMarginsColor() {
@@ -881,7 +887,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the color of the margins.
-   * 
+   *
    * @param color the margins color
    */
   public void setMarginsColor(int color) {
@@ -900,7 +906,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the color of the grid.
-   * 
+   *
    * @param color the grid color
    */
   public void setGridColor(int color) {
@@ -919,7 +925,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the pan limits.
-   * 
+   *
    * @return the pan limits
    */
   public double[] getPanLimits() {
@@ -930,7 +936,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
    * Sets the pan limits as an array of 4 values. Setting it to null or a
    * different size array will disable the panning limitation. Values:
    * [panMinimumX, panMaximumX, panMinimumY, panMaximumY]
-   * 
+   *
    * @param panLimits the pan limits
    */
   public void setPanLimits(double[] panLimits) {
@@ -939,7 +945,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the zoom limits.
-   * 
+   *
    * @return the zoom limits
    */
   public double[] getZoomLimits() {
@@ -950,7 +956,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
    * Sets the zoom limits as an array of 4 values. Setting it to null or a
    * different size array will disable the zooming limitation. Values:
    * [zoomMinimumX, zoomMaximumX, zoomMinimumY, zoomMaximumY]
-   * 
+   *
    * @param zoomLimits the zoom limits
    */
   public void setZoomLimits(double[] zoomLimits) {
@@ -959,7 +965,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the rotation angle of labels for the X axis.
-   * 
+   *
    * @return the rotation angle of labels for the X axis
    */
   public float getXLabelsAngle() {
@@ -968,7 +974,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the rotation angle (in degrees) of labels for the X axis.
-   * 
+   *
    * @param angle the rotation angle of labels for the X axis
    */
   public void setXLabelsAngle(float angle) {
@@ -977,7 +983,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the rotation angle of labels for the Y axis.
-   * 
+   *
    * @return the approximate number of labels for the Y axis
    */
   public float getYLabelsAngle() {
@@ -986,7 +992,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the rotation angle (in degrees) of labels for the Y axis.
-   * 
+   *
    * @param angle the rotation angle of labels for the Y axis
    */
   public void setYLabelsAngle(float angle) {
@@ -995,7 +1001,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the size of the points, for charts displaying points.
-   * 
+   *
    * @return the point size
    */
   public float getPointSize() {
@@ -1004,7 +1010,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the size of the points, for charts displaying points.
-   * 
+   *
    * @param size the point size
    */
   public void setPointSize(float size) {
@@ -1017,7 +1023,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the axes range values.
-   * 
+   *
    * @param range an array having the values in this order: minX, maxX, minY,
    *          maxY
    * @param scale the renderer scale
@@ -1035,7 +1041,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns if the initial range is set.
-   * 
+   *
    * @param scale the renderer scale
    * @return the initial range was set or not
    */
@@ -1045,7 +1051,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the initial range.
-   * 
+   *
    * @return the initial range
    */
   public double[] getInitialRange() {
@@ -1054,7 +1060,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the initial range.
-   * 
+   *
    * @param scale the renderer scale
    * @return the initial range
    */
@@ -1064,7 +1070,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the axes initial range values. This will be used in the zoom fit tool.
-   * 
+   *
    * @param range an array having the values in this order: minX, maxX, minY,
    *          maxY
    */
@@ -1074,7 +1080,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the axes initial range values. This will be used in the zoom fit tool.
-   * 
+   *
    * @param range an array having the values in this order: minX, maxX, minY,
    *          maxY
    * @param scale the renderer scale
@@ -1085,7 +1091,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the X axis labels color.
-   * 
+   *
    * @return the X axis labels color
    */
   public int getXLabelsColor() {
@@ -1094,7 +1100,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the Y axis labels color.
-   * 
+   *
    * @return the Y axis labels color
    */
   public int getYLabelsColor(int scale) {
@@ -1103,7 +1109,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the X axis labels color.
-   * 
+   *
    * @param color the X axis labels color
    */
   public void setXLabelsColor(int color) {
@@ -1112,7 +1118,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the Y axis labels color.
-   * 
+   *
    * @param scale the renderer scale
    * @param color the Y axis labels color
    */
@@ -1122,7 +1128,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the X axis labels alignment.
-   * 
+   *
    * @return X labels alignment
    */
   public Align getXLabelsAlign() {
@@ -1131,7 +1137,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the X axis labels alignment.
-   * 
+   *
    * @param align the X labels alignment
    */
   public void setXLabelsAlign(Align align) {
@@ -1140,7 +1146,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Returns the Y axis labels alignment.
-   * 
+   *
    * @param scale the renderer scale
    * @return Y labels alignment
    */
@@ -1162,7 +1168,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 
   /**
    * Sets the Y axis labels alignment.
-   * 
+   *
    * @param align the Y labels alignment
    */
   public void setYLabelsAlign(Align align, int scale) {
@@ -1334,4 +1340,16 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
   public int getScalesCount() {
     return scalesCount;
   }
+
+    private void readObject(java.io.ObjectInputStream in)
+            throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        if (Build.VERSION.SDK_INT <= 10) // not complete workaround for the serialization bug in android ver 2.3 ...
+        {
+            mYLabelFormat = new NumberFormat[scalesCount];
+            for (int i = 0; i < scalesCount; i++) {
+                mYLabelFormat[i] = NumberFormat.getNumberInstance();
+            }
+        }
+    }
 }

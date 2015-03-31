@@ -89,7 +89,7 @@ public class TimeChart extends LineChart {
    *          appropriate default format will be used.
    */
   public void setDateFormat(String format) {
-    mDateFormat[0] = format;
+    mDateFormat = new String[] { format };
   }
 
     /**
